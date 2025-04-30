@@ -120,7 +120,10 @@ Faça uma função busca_qtd_jogos que retorna quantos
 jogos batem com uma determinada busca.
 '''
 def busca_qtd_jogos(texto_buscar):
-    pass #implemente!
+    url = f"http://www.omdbapi.com/?apikey={api_key}&s={texto_buscar}&type=game"
+    pedido = requests.get(url) #conectar na URL
+    dicionario_do_pedido = pedido.json() #transformo a string que eu recebi num dicionário de python
+    return dicionario_do_pedido['totalResults']
 
 '''
 Agora, vamos aprender a ver os detalhes de um filme.
@@ -142,14 +145,20 @@ Faça uma função nome_do_filme_por_id que recebe a id de
 um filme e retorna o seu nome.
 '''
 def nome_do_filme_por_id(id_filme):
-    pass #implemente!
+    url = f"http://www.omdbapi.com/?apikey={api_key}&i={id_filme}"
+    pedido = requests.get(url)
+    dicionario_do_pedido = pedido.json()
+    return dicionario_do_pedido['Title']
 
 '''
 Faça uma função ano_do_filme_por_id que recebe a id de
 um filme e retorna o seu ano de lançamento.
 '''
 def ano_do_filme_por_id(id_filme):
-    pass #implemente!
+    url = f"http://www.omdbapi.com/?apikey={api_key}&i={id_filme}"
+    pedido = requests.get(url)
+    dicionario_do_pedido = pedido.json()
+    return dicionario_do_pedido['Year']
 
 '''
 Peguemos vários dados de um filme de uma vez.
@@ -165,8 +174,31 @@ O dicionário deve ter as seguintes chaves:
 
 E os dados devem ser preenchidos baseado nos dados do site.
 '''
-def dicionario_do_filme_por_id(id_filme):
-    pass #implemente!
+# def dados_do_filme_por_id(id_filme):
+#     url = f"http://www.omdbapi.com/?apikey={api_key}&i={id_filme}"
+#     pedido = requests.get(url)
+#     dicionario_do_pedido = pedido.json()
+    
+#     dicionario = {}
+#     dicionario['ano'] = dicionario_do_pedido['Year']
+#     dicionario['nome'] = dicionario_do_pedido['Title']
+#     dicionario['diretor'] = dicionario_do_pedido['Director']
+#     dicionario['genero'] = dicionario_do_pedido['Genre']
+    
+    # return dicionario
+    
+#otimizar o código
+def dados_do_filme_por_id(id_filme):
+    dicionario_do_pedido = busca_por_id(id_filme)
+    
+    dicionario = {}
+    dicionario['ano'] = dicionario_do_pedido['Year']
+    dicionario['nome'] = dicionario_do_pedido['Title']
+    dicionario['diretor'] = dicionario_do_pedido['Director']
+    dicionario['genero'] = dicionario_do_pedido['Genre']
+    
+    return dicionario
+
 
 '''
 Voltando para a busca...
@@ -179,8 +211,31 @@ A sua resposta deve ser uma lista, cada filme representado por
 um dicionário. cada dicionario deve conter os campos
 'nome' (valor Title da resposta) e 'ano' (valor Year da resposta).
 '''
+#sugestão copilot
+# def busca_filmes(texto_buscar):
+#     dicionario_do_pedido = busca_por_texto(texto_buscar)
+#     lista = []
+    
+#     for i in range(10):
+#         dicionario = {}
+#         dicionario['nome'] = dicionario_do_pedido['Search'][i]['Title']
+#         dicionario['ano'] = dicionario_do_pedido['Search'][i]['Year']
+#         lista.append(dicionario)
+    
+#     return lista
+
 def busca_filmes(texto_buscar):
-    pass #implemente!
+    dic_busca = busca_por_texto(texto_buscar)
+    lista_de_filmes = dic_busca['Search']
+    lista_resposta = []
+    for filme in lista_de_filmes:
+        dic = {}
+        dic['nome'] = filme['Title']
+        dic['ano'] = filme['Year']
+        #guardar o dicionário na lista
+        lista_resposta.append(dic)
+           
+    return lista_resposta
 
 
 '''
@@ -188,7 +243,16 @@ Faça uma função busca_filmes_grande que, dada uma busca, retorna
 os VINTE primeiros filmes que batem com a busca.
 '''
 def busca_filmes_grande(texto_buscar):
-    pass #implemente!
-
+    dic_busca = busca_por_texto(texto_buscar)
+    lista_de_filmes = dic_busca['Search']
+    lista_resposta = []
+    for filme in lista_de_filmes[:20]:
+        dic = {}
+        dic['nome'] = filme['Title']
+        dic['ano'] = filme['Year']
+        #guardar o dicionário na lista
+        lista_resposta.append(dic)
+           
+    return lista_resposta
 
 
